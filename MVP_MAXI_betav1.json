@@ -1,0 +1,1804 @@
+{
+  "name": "Agente/portifolio/site",
+  "nodes": [
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('If').item.json.headers['user-agent'] }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -1300,
+        580
+      ],
+      "id": "96c3dc75-adae-4b24-8534-50466bdd12bc",
+      "name": "Memoria-conversa",
+      "credentials": {
+        "postgres": {
+          "id": "ma02Ty8qBZW7huuj",
+          "name": "Postgres account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "62277632-019e-4601-bdf7-bc2defbe45ce",
+              "name": "Message",
+              "value": "={{ $json.Message }}",
+              "type": "string"
+            },
+            {
+              "id": "new-field-3",
+              "name": "dados_medicamento",
+              "value": "={{ $json.dados_medicamento }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1660,
+        320
+      ],
+      "id": "5a9c4719-d433-4839-b139-27ee4581ba48",
+      "name": "Consolidar-entrada"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dc1f724d-c3c8-465d-967f-7eeabe936e7e",
+              "name": "Message",
+              "value": "={{ $json.content }}",
+              "type": "string"
+            },
+            {
+              "id": "new-field-2",
+              "name": "dados_medicamento",
+              "value": "={{ $json }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1880,
+        480
+      ],
+      "id": "fba3707a-4505-4926-975b-28877eac993d",
+      "name": "Formatar-saida-imagem"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4f72bc8a-23c1-4271-913d-21056671b2d7",
+              "name": "Message",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1880,
+        180
+      ],
+      "id": "f05c9d46-0826-440d-80ef-76cc2254e59c",
+      "name": "Formatar-saida-audio"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini-2024-07-18",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI-2024-07-18"
+        },
+        "text": "=Você é um assistente especializado em análise de documentos médicos. Sua função é extrair informações precisas de:\n\n1. Bulas de remédios\n2. Caixas de medicamentos\n3. Receitas médicas\n\n**Instruções:**\n1. Extraia os seguintes campos quando presentes:\n   - Nome comercial (ex: 'Vibral')\n   - Princípio ativo (ex: 'dropropizina')\n   - Dosagem (ex: '15mg/mL')\n   - Forma farmacêutica (comprimido, gotas, xarope, etc.)\n   - Volume/conteúdo (ex: '120mL')\n\n2. Padronize os nomes conforme a lista de produtos da farmácia:\n   - Adicione 'Comprimido', 'Cápsula', 'Xarope' etc. no final\n   - Inclua a dosagem (ex: 'Escitalopram 10mg Comprimido')\n\n3. Retorne em formato JSON estruturado:\n```json\n{\n  \"tipo\": \"MEDICAMENTO\",\n  \"nome_comercial\": \"NOME\",\n  \"principio_ativo\": \"PRINCIPIO_ATIVO\",\n  \"dosagem\": \"DOSAGEM\",\n  \"forma_farmaceutica\": \"FORMATO\",\n  \"dados_extras\": {\n    \"volume\": \"VOLUME\",\n    \"registro\": \"NUMERO_REGISTRO\"\n  }\n}\n```\n\n4. Para receitas médicas, extraia:\n   - Nome do paciente\n   - Medicamentos prescritos (nome, dosagem, quantidade)\n   - Posologia\n\n5. Se não conseguir identificar claramente, retorne campos como 'indeterminado'",
+        "inputType": "base64",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -2100,
+        480
+      ],
+      "id": "d47a8290-ece1-4839-b125-a00928bca696",
+      "name": "Transcrever-imagem",
+      "credentials": {
+        "openAiApi": {
+          "id": "vM2gEV8r8uTXb0PI",
+          "name": "OpenAi lucas"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "base64",
+        "options": {
+          "fileName": "audio.mp3",
+          "mimeType": "audio/mpeg"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -2320,
+        180
+      ],
+      "id": "c8388792-f564-4e11-8b55-87206bbffab5",
+      "name": "Converter-audio-base64"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "base64",
+        "options": {
+          "fileName": "imagem.jpeg"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -2320,
+        480
+      ],
+      "id": "46c7cf91-81c7-4f72-8000-972cc3445659",
+      "name": "Converter-imagem-base64"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -2100,
+        180
+      ],
+      "id": "7ae6cb65-9b93-410a-871f-03e26d89e236",
+      "name": "Transcrever-audio",
+      "credentials": {
+        "openAiApi": {
+          "id": "vM2gEV8r8uTXb0PI",
+          "name": "OpenAi lucas"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a22aa201-9d3b-481a-8291-0905cb238530",
+                    "leftValue": "={{ $('Filtro-entrada').item.json.Message }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "texto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b263dfe9-9b60-4d0b-9878-74e975f56484",
+                    "leftValue": "={{ $json.messageType }}",
+                    "rightValue": "audioMessage",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c0c390c2-cd2e-44f8-a00b-0d419aadce2a",
+                    "leftValue": "={{ $json.Imagem }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "imageMessage"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -2560,
+        340
+      ],
+      "id": "cfe04148-c221-4599-b71d-e476e940dba8",
+      "name": "Distribuicao-entrada"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6dc3c4b5-03e8-443a-84db-0ee5ddacb37e",
+              "name": "base64",
+              "value": "={{ $json.body.base64 }}",
+              "type": "string"
+            },
+            {
+              "id": "5829d3ab-1989-49d3-9707-350b1be3b628",
+              "name": "Message",
+              "value": "={{ $json.body.mensagem }}",
+              "type": "string"
+            },
+            {
+              "id": "66332858-df11-432e-96c8-5be16299e393",
+              "name": "Imagem",
+              "value": "={{ $json.body.imageMessage.jpegThumbnail }}",
+              "type": "string"
+            },
+            {
+              "id": "a8e20c69-ffbd-44ca-b198-f4cd3b6171f3",
+              "name": "user",
+              "value": "={{ $json.headers['user-agent'] }}",
+              "type": "string"
+            },
+            {
+              "id": "new-field-1",
+              "name": "messageType",
+              "value": "={{ $json.body.messageType }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3340,
+        340
+      ],
+      "id": "7004e886-450f-45e5-981f-7cb4e19b7766",
+      "name": "Filtro-entrada"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agente-site-portifolio",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -3920,
+        360
+      ],
+      "id": "d4e740ca-329b-4040-8c4a-72ece7ea32b1",
+      "name": "Inicio-Mensagem",
+      "webhookId": "342fb9f9-0d04-423c-a05e-d7819c77ab66"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Utilize esta tool para consultar os medicamentos em estoque",
+        "documentId": {
+          "__rl": true,
+          "value": "1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI",
+          "mode": "list",
+          "cachedResultName": "Base de Atendimento Farmácia v1.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1372799164,
+          "mode": "list",
+          "cachedResultName": "Medicamentos",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit#gid=1372799164"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -1120,
+        580
+      ],
+      "id": "5d455833-3308-4437-b723-60854d5adeed",
+      "name": "Medicamentos",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pAmS04tDAVbUHEr6",
+          "name": "Google AG360"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Utilize essa tool para consultar o FAQ. Usado para perguntas frequentes",
+        "documentId": {
+          "__rl": true,
+          "value": "1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI",
+          "mode": "list",
+          "cachedResultName": "Base de Atendimento Farmácia v1.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1556371085,
+          "mode": "list",
+          "cachedResultName": "FAQ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit#gid=1556371085"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -980,
+        580
+      ],
+      "id": "58a24a57-c858-4a13-b451-94efed8ba7aa",
+      "name": "FAQ",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pAmS04tDAVbUHEr6",
+          "name": "Google AG360"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Utilize essa tool para consultar se o cliente tem cadastro",
+        "documentId": {
+          "__rl": true,
+          "value": "1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI",
+          "mode": "list",
+          "cachedResultName": "Base de Atendimento Farmácia v1.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 251917201,
+          "mode": "list",
+          "cachedResultName": "Clientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit#gid=251917201"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -860,
+        580
+      ],
+      "id": "ca64f6ac-bba3-4cf4-9e08-a0b6e485e707",
+      "name": "Clientes",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pAmS04tDAVbUHEr6",
+          "name": "Google AG360"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Utilize essa tool para calcular as taxas de entrega baseado onde o cliente mora",
+        "documentId": {
+          "__rl": true,
+          "value": "1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI",
+          "mode": "list",
+          "cachedResultName": "Base de Atendimento Farmácia v1.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 389490017,
+          "mode": "list",
+          "cachedResultName": "Taxa de Entrega",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit#gid=389490017"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -740,
+        580
+      ],
+      "id": "772bfef2-7a5a-43d9-98b6-f3a2a0e3ec7f",
+      "name": "Taxa de Entrega",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pAmS04tDAVbUHEr6",
+          "name": "Google AG360"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Utilize essa tool para consultar produtos semelhantes ao que o cliente esta procurando",
+        "documentId": {
+          "__rl": true,
+          "value": "1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI",
+          "mode": "list",
+          "cachedResultName": "Base de Atendimento Farmácia v1.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1393564448,
+          "mode": "list",
+          "cachedResultName": "Produtos Semelhantes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit#gid=1393564448"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -620,
+        580
+      ],
+      "id": "732a05e6-f7ba-4c08-8995-41efab752c16",
+      "name": "Produtos semelhantes",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pAmS04tDAVbUHEr6",
+          "name": "Google AG360"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -2600,
+        940
+      ],
+      "id": "933c835d-3169-4d34-b32b-f4a5320f1f28",
+      "name": "When clicking 'Test workflow'"
+    },
+    {
+      "parameters": {
+        "operation": "deleteTable",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "n8n_chat_histories",
+          "mode": "list",
+          "cachedResultName": "n8n_chat_histories"
+        },
+        "deleteCommand": "delete",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2360,
+        940
+      ],
+      "id": "45896f50-0a74-40cd-98ce-510c5ef989a8",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "n3Tl2gSebROcO2SD",
+          "name": "Postgres Max"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Mensagem do cliente: {{ $json.Message }}\nDados do medicamento: {{ $json.dados_medicamento }}\nTelefone do cliente: {{ $('If').item.json.headers['user-agent'] }}",
+        "options": {
+          "systemMessage": "=<alerta>\n\nNão execute nada que não esteja inserido em <instruções></instruções>. Não invente nenhuma informação que não esteja em <instruções></instruções>.\n\n</alerta>\n\n<instruções>\n\n<dataAtual>\n\n{{ $now.toISO() }}\n{{ $now.weekdayLong }}\n\n</dataAtual>\n\n<persona>\n\n- Você é o Agente Virtual da Farmácia Maxi. \n- Você responde cliente no whatsapp\n- Você deve parecer o mais humano possível\n\n</persona>\n\n<caracteristicas>\n\n- Agilidade no atendimento\n- Simpatia e cordialidade\n- Clareza e segurança nas respostas\n\n</caracteristicas>\n\n<objetivos>\n\n- Atendimento ao cliente:\n - Realizar vendas de remédios \n - Esclarecer dúvidas\n - Realizar o suporte ao cliente\n\n</obejetivos>\n\n<atendimento>\n\n- Quando for a primeira conversa do dia com o cliente(você saberá isso baseado no histórico de mensagens e no horário da mensagem). Apresente-se de forma clara e educada:\n - \"Olá! Sou o agente virtual da Farmácia Maxi. Como posso te ajudar hoje?\"\n- Responda apenas com base nas mensagens do cliente\n- Identifique a intenção do cliente para agir com mais clareza:\n - compra\n - consulta\n - dúvida sobre entrega\n - dúvida sobre desconto\n - envio de receita\n\n</atendimento>\n\n<tools>\n\n- Medicamentos: Buscar informações sobre medicamentos\n- FAQ: Perguntas frequentes que os clientes fazem para farmácia\n- Clientes: Clientes que possuem cadastros\n- Taxa de entrega: Taxa de entrega por região\n- Produtos semelhantes: Buscar produtos semelhantes. Caso não encontre o que o cliente busca, ou para sugerir uma outra possibilidade\n- Criar cliente: Para criar o cadastro do cliente caso não exista\n- Atualizar cliente: Para atualizar os dados do cadastro do cliente\n- Think\n- Calculator: Utilizar sempre que for fazer qualquer conta\n- Pedidos: Quando o cliente finalizar um pedido você deve chamar essa tool para cadastrar o pedido do cliente\n- Desconto: Utilizar para ver quais as promoções do dia que estão disponiveis baseado no dia da semana\n\n</tools>\n\n<consultaProdutos>\n\n- ETAPA 1:\n - Utilizar a tool *Medicamentos* para buscar dados sobre os medicamentos com base no que  o cliente deseja\n- ETAPA 2:\n - Se não encontrar o medicamento que o cliente deseja na ETAPA 1, você deve utilizar a tool  *Produtos semlhantes* para buscar algum medicamento parecido com o que o cliente desejou\n- ETAPA 3:\n - Se não encontrar o nada que se adeque ao pedido do cliente na ETAPA 1 e ETAPA 2. Responda:\n  -\"No momento, não localizamos o item solicitado. Posso encaminhar você para um de nossos atendentes?\"\n\n</consultaProdutos>\n\n<resposta>\n\n- Utilize emojis quando necessário\n- Não envie mensagens muito longas\n- Quando for responder sobre algum produto para o cliente. Responda seguindo o modelo abaixo:\n - cliente: vcs tem dipirona?\n - agente: \"Sim, temos! Dipirona 500mg Comprimido — R$ 8,90. Deseja fazer o pedido ou precisa de ajuda com mais alguma coisa?\"\n- Quando o cliente enviar uma lista, responda seguindo o modelo abaixo:\n - cliente: \"Quero Dipirona, Vitamina C e Omeprazol.\"  \n - agente: \"Encontrei:  \n   Dipirona 500mg – R$ 8,90  \n   Vitamina C 1g – R$ 12,00  \n   Omeprazol 20mg – R$ 15,00  \n   Confirma os itens para o pedido?\"\n\n</resposta>\n\n<resumo>\n\n- Para fazer o resumo do pedido do cliente. Utilize o modelo de exemplo abaixo:\n - > 🧾 Resumo do seu pedido:  \n   > Dipirona — R$ 8,90  \n   > Vitamina C 1g — R$ 12,00  \n   > Cupom do dia da saúde aplicado: -R$ 1,20  \n   > Entrega: R$ 5,00  \n   > 💰 Total: R$ 24,70  \n   > 💳 Como deseja pagar? Pix ou Cartão? \n\n<resumo>\n\n<diasDesconto>\n\nREGRAS DE PROMOÇÕES SEMANAIS:\n\n- Segunda-feira (Dia do Bebê):\n  → Fraldas: 10% de desconto\n  → Produtos gerais para bebês: 15% de desconto\n\n- Terça-feira (Dia das Mulheres):\n  → Produtos de higiene e hidratantes: 20% de desconto\n\n- Quarta-feira (Dia dos Marombas):\n  → Produtos de academia: 15% de desconto\n\n- Quinta-feira (Dia dos Velhinhos):\n  → Produtos geriátricos: 15% de desconto\n\n- Sexta-feira (Dia da Saúde):\n  → Todos os remédios: 25% de desconto\n\n</diasDesconto>\n\n<pedido>\n\n- Para o cliente fazer qualquer pedido, seja para retirada na loja ou entrega, é necessário que ele tenha um cadastro\n- Antes de qualquer pedido verifique se o cliente tem cadastro. Para isso você deve consultar a tool *Clientes* para verificar se ele tem cadastro, baseado no número de telefone fornecido no input. Caso ele não tenha cadastro execute o que está em <cadastroClinte></cadastroClinte>. \n- Executar técnicas de vendas como sugeridas em <crossell></crossell>\n\n</pedido>\n\n<processoVenda>\n\n- Enquanto um cliente estiver fazendo um pedido, você deve conferir na tool *Desconto* se o pedido do cliente tem haver com o desconto do dia. \n  - Em caso positivo: explique para o cliente a promoção do dia e incentive ele a levar mais por conta do desconto. \n  - Em caso negativo: você deve buscar na tool *Clientes* se o cliente tem um histórico de pedidos.\n    - Em caso positivo: Ofereça um produto baseado no histórico de compras do cliente\n\n</processoVenda>\n\n<cadastroClinte>\n\n- Utilize a tool *Criar cliente* para cadastra-lo\n- Só cadastre o cliente caso ele não tenha cadastro\n- Para fazer o cadastro do cliente é necessário:\n - Nome completo\n - CPF(o CPF pode conter zero como primeiro digito)\n - E-mail\n - Endereço\n - Número de celular. Mas confirme com o cliente se o número está correto ou se deve utilizar outro que ele fornecerá(fornecido no seu input)\n\n</cadastroCliente>\n\n<atualizarCadastro>\n\n- Atualize o cadastro do cliente quando ele disser ou quando os dados apresentados não forem compátiveis com o cadastro dele.\n- SEMPRE antes de atualizar o cadastro do cliente, você deve consultar a tool *Cliente* para verificar qual cadastro você deve atualizar\n- Nunca atualize a linha 1\n- Nunca\n\n</atualizarCadastro>\n\n<formasPagamento>\n\n- Pix:  \n  - \"Segue nossa chave Pix para pagamento: pix@farmaciamaxi.com\"\n\n- Cartão:  \n  - \"Vamos te enviar um link seguro para pagamento via cartão, tudo bem?\"\n\n</formasPagamento>\n\n<regras>\n\n- Não utilize exemplos como se fossem respostas prontas\n- Não invente dados\n- Em caso de dúvidas ou ausência de produtos:  \n   - \"Esse item não foi localizado. Posso te encaminhar para um atendente agora mesmo?\"\n- Não envie mensagens longas demais\n- So finalize um cadastro com todos os dados necessários\n- Sempre confirme o endereço do cliente antes de confimar a entrega\n- So o cliente deve confirmar os pedidos\n- Confirme com o cliente os dados do cadastro dele\n- NUNCA inventar nenhum produto, somente utilizar os que estão dentro das tools\n- NUNCA utilize a tool *Criar cliente* sem antes utilizar a tool *Clientes*\n- Quando for sugerir algum produto, sempre olhe novamente os produtos disponiveis com as tools *Medicamentos* e *Produtos semelhantes*\n- Você so cria o cliente uma única vez\n- SEMPRE que for fornecer qualquer coisa relacionada a valor pro cliente. Utilizar a tool *Calculator* para fazer as contas\n- SEMPRE que houver algum tipo de desconto aplicado no valor, você deve deixar ele descriminado\n- SEMPRE altere os emojis que você usa\n\n</regras>\n\n</instruções>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -1300,
+        320
+      ],
+      "id": "2055d698-3b0e-4800-90a2-77b6368c8afd",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolThink",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        580
+      ],
+      "id": "94e2bfe5-0140-45a0-ae2f-3cb2f6b8687b",
+      "name": "Think"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Utilizar esta tool quando for criar o cadastro de um cliente",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI",
+          "mode": "list",
+          "cachedResultName": "Base de Atendimento Farmácia v1.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 251917201,
+          "mode": "list",
+          "cachedResultName": "Clientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit#gid=251917201"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nome": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Nome', ``, 'string') }}",
+            "CPF": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('CPF', ``, 'string') }}",
+            "Endereço": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Endere_o', ``, 'string') }}",
+            "E-mail": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('E-mail', ``, 'string') }}",
+            "Número": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('N_mero', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "CPF",
+              "displayName": "CPF",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Endereço",
+              "displayName": "Endereço",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Número",
+              "displayName": "Número",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "E-mail",
+              "displayName": "E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -160,
+        580
+      ],
+      "id": "f0a78332-5c0f-4b5d-a74a-7cb913fa7939",
+      "name": "Criar cliente",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pAmS04tDAVbUHEr6",
+          "name": "Google AG360"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        40,
+        580
+      ],
+      "id": "5de1bf48-158f-49f9-80cf-09b6e6ff994c",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "147d69c6-dc4a-42f8-9825-cff29483d8b5",
+              "name": "messages",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -940,
+        320
+      ],
+      "id": "ec16ddb2-d7ad-4731-a1d5-5ca80011a36a",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2f3e3a3d-d275-491c-ae64-513113672d0d",
+              "name": "messages",
+              "value": "={{ $json.messages.split('\\n\\n') }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -780,
+        320
+      ],
+      "id": "b2255dab-9c71-4266-b736-e90d2fc90d75",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -220,
+        100
+      ],
+      "id": "e4625b74-049c-4b6b-9d44-3cc252bc2ad7",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -20,
+        180
+      ],
+      "id": "0779e50c-9b5f-4e66-9a85-91bbf9a1fee3",
+      "name": "Wait",
+      "webhookId": "02cb0e3a-011a-4a41-9a10-573c16b650af"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5809748b-134d-40e8-80ee-fbda2608c239",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "messages",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -560,
+        320
+      ],
+      "id": "053441a5-af34-498d-b39c-0ffd9c847088",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": []
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3000,
+        340
+      ],
+      "id": "ed8c4c83-c46b-4852-ae0b-15e492cde179",
+      "name": "Filtro-entrada1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8d67c0bb-e92a-46eb-a803-f520b81807c6",
+              "leftValue": "={{ $json.headers['x-forwarded-for'] }}",
+              "rightValue": "556181098020@s.whatsapp.net",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -3600,
+        360
+      ],
+      "id": "dde198d8-2415-40a9-8dc5-1d55e2d894da",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Utilize essa tool para atualizar o cadastro do cliente",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI",
+          "mode": "list",
+          "cachedResultName": "Base de Atendimento Farmácia v1.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 251917201,
+          "mode": "list",
+          "cachedResultName": "Clientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit#gid=251917201"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('row_number__using_to_match_', ``, 'string') }}",
+            "Nome": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Nome', ``, 'string') }}",
+            "CPF": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('CPF', ``, 'string') }}",
+            "Endereço": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Endere_o', ``, 'string') }}",
+            "Número": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('N_mero', ``, 'string') }}",
+            "E-mail": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('E-mail', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "CPF",
+              "displayName": "CPF",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Endereço",
+              "displayName": "Endereço",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Número",
+              "displayName": "Número",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "E-mail",
+              "displayName": "E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        220,
+        580
+      ],
+      "id": "452f7afb-bac2-4331-b8bf-0b6be390e35d",
+      "name": "Atualizar cliente",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pAmS04tDAVbUHEr6",
+          "name": "Google AG360"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Utilize essa tool para verificar se existe algum desconto do dia",
+        "documentId": {
+          "__rl": true,
+          "value": "1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI",
+          "mode": "list",
+          "cachedResultName": "Base de Atendimento Farmácia v1.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 694463075,
+          "mode": "list",
+          "cachedResultName": "Cupom de Desconto",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit#gid=694463075"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -480,
+        580
+      ],
+      "id": "69c913ba-29da-4677-98e0-51a84a086566",
+      "name": "Desconto",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pAmS04tDAVbUHEr6",
+          "name": "Google AG360"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "7b6ccf50-b608-407e-b7ae-26352c46fc2a",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1440,
+        980
+      ],
+      "id": "f0650dab-5107-4767-8d07-661db6b21fc8",
+      "name": "Webhook",
+      "webhookId": "7b6ccf50-b608-407e-b7ae-26352c46fc2a"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Chame essa tool para cadastrar os pedidos do cliente. Você deve enviar o pedido e o número de celular do cliente",
+        "method": "POST",
+        "url": "https://n8n-n8n.7ztis2.easypanel.host/webhook/3a4d25c7-2758-43cb-be88-1f4fb2bc0249",
+        "sendBody": true,
+        "parametersBody": {
+          "values": [
+            {
+              "name": "Pedido"
+            },
+            {
+              "name": "numero"
+            },
+            {
+              "name": "remotejid",
+              "valueProvider": "fieldValue",
+              "value": "={{ $('Filtro-entrada').item.json.remoteJid }}"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        420,
+        580
+      ],
+      "id": "5d04a79a-efce-4106-b789-a164b5e720a7",
+      "name": "Pedidos"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Pedido do cliente: {{ $json.body.Pedido }}\nNúmero do cliente: {{ $json.body.numero }}",
+        "options": {
+          "systemMessage": "- Você é um agente especialista em cadastrar os pedidos do clientes na nossa planilha\n- Você não fala diretamente com o cliente, somente executa sua função\n<TOOLS>\n\n- Cliente: Para verificar qual o cliente\n- Atualizar: Para cadastrar o pedido do cliente na coluna **Histórico de pedidos**\n\n</TOOLS>"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        -1220,
+        980
+      ],
+      "id": "263e7039-2428-469b-b156-994b04b18329",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1280,
+        1180
+      ],
+      "id": "43ccd747-1f29-46c1-b3f1-61ff138a7a20",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "vM2gEV8r8uTXb0PI",
+          "name": "OpenAi lucas"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.body.remotejid }}",
+        "contextWindowLength": 3
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -1160,
+        1200
+      ],
+      "id": "38d703d2-6c63-4612-90e1-ec1d24923e16",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "n3Tl2gSebROcO2SD",
+          "name": "Postgres Max"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Verificar o cliente para atualizar o pedido",
+        "documentId": {
+          "__rl": true,
+          "value": "1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI",
+          "mode": "list",
+          "cachedResultName": "Base de Atendimento Farmácia v1.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 251917201,
+          "mode": "list",
+          "cachedResultName": "Clientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit#gid=251917201"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -960,
+        1200
+      ],
+      "id": "50870118-c85c-4ebd-b31e-20d54d1ccbd8",
+      "name": "Cliente",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pAmS04tDAVbUHEr6",
+          "name": "Google AG360"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Cadastrar o pedido do cliente",
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI",
+          "mode": "list",
+          "cachedResultName": "Base de Atendimento Farmácia v1.0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 251917201,
+          "mode": "list",
+          "cachedResultName": "Clientes",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1L2Q_yWp_68PF9mVvwqmrIj3Zxxn7o5LNZMxWBewRjbI/edit#gid=251917201"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('row_number__using_to_match_', ``, 'string') }}",
+            "Histórico de pedidos": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Hist_rico_de_pedidos', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "Nome",
+              "displayName": "Nome",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "CPF",
+              "displayName": "CPF",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Endereço",
+              "displayName": "Endereço",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Número",
+              "displayName": "Número",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "E-mail",
+              "displayName": "E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Histórico de pedidos",
+              "displayName": "Histórico de pedidos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        -760,
+        1200
+      ],
+      "id": "fcafc3e4-6a8f-4101-a248-1f8c3ac01389",
+      "name": "Atualizar",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pAmS04tDAVbUHEr6",
+          "name": "Google AG360"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -860,
+        980
+      ],
+      "id": "85120899-c07f-493e-bfd6-bf9f7d4985e4",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -1500,
+        580
+      ],
+      "id": "710452e0-b2f9-4282-80d1-3beb209e0814",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "inUDKqZoTI17VXTN",
+          "name": "OpenAi Luka"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "texto",
+              "value": "={{ $json.texto || $json.messages?.[0] || $json.output || $json.message }}",
+              "type": "string"
+            },
+            {
+              "name": "audio",
+              "value": "={{ $json.audio }}",
+              "type": "string"
+            },
+            {
+              "name": "imagem",
+              "value": "={{ $json.imagem }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -900,
+        980
+      ],
+      "id": "set-ajuste-frontend",
+      "name": "Ajustar resposta para frontend"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Formatar-saida-imagem": {
+      "main": [
+        [
+          {
+            "node": "Consolidar-entrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formatar-saida-audio": {
+      "main": [
+        [
+          {
+            "node": "Consolidar-entrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcrever-imagem": {
+      "main": [
+        [
+          {
+            "node": "Formatar-saida-imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converter-audio-base64": {
+      "main": [
+        [
+          {
+            "node": "Transcrever-audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Converter-imagem-base64": {
+      "main": [
+        [
+          {
+            "node": "Transcrever-imagem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcrever-audio": {
+      "main": [
+        [
+          {
+            "node": "Formatar-saida-audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Distribuicao-entrada": {
+      "main": [
+        [
+          {
+            "node": "Consolidar-entrada",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Converter-audio-base64",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Converter-imagem-base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtro-entrada": {
+      "main": [
+        [
+          {
+            "node": "Filtro-entrada1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inicio-Mensagem": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Test workflow'": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consolidar-entrada": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memoria-conversa": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Medicamentos": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FAQ": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clientes": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Taxa de Entrega": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Produtos semelhantes": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Think": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar cliente": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtro-entrada1": {
+      "main": [
+        [
+          {
+            "node": "Distribuicao-entrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Filtro-entrada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar cliente": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Desconto": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pedidos": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cliente": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Atualizar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Ajustar resposta para frontend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ajustar resposta para frontend": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "acb28830-50e5-4333-b744-63422790cb9c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "716e48a60318acd785e59191144dded9a287501c06968cfc622ae9c241f2b50a"
+  },
+  "id": "hN100Qvm8aknZpep",
+  "tags": []
+}

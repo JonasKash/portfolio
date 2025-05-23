@@ -1,0 +1,25 @@
+<svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00f0ff"/>
+      <stop offset="100%" stop-color="#9442fe"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.5"/>
+      <stop offset="80%" stop-color="#9442fe" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- Glow de fundo -->
+  <g>
+    <polygon points="110,30 195,75 195,165 110,210 25,165 25,75" fill="url(#glow1)" opacity="0.7"/>
+    <ellipse cx="110" cy="140" rx="38" ry="22" fill="url(#glow1)" opacity="0.4"/>
+  </g>
+  <!-- Linhas principais nítidas -->
+  <g>
+    <polygon points="110,30 195,75 195,165 110,210 25,165 25,75" stroke="url(#grad1)" stroke-width="8" fill="none"/>
+    <path d="M70 80 V140 Q110 190 150 140 V80" stroke="url(#grad1)" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M85 95 V135 Q110 170 135 135 V95" stroke="url(#grad1)" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M97 110 V130 Q110 150 123 130 V110" stroke="url(#grad1)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg> 
