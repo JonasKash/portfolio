@@ -8,18 +8,6 @@ import ChatInterface from "../components/ChatInterface";
 export default function Portfolio() {
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [filter, setFilter] = useState("all");
-  // Removidos estados não utilizados relacionados ao formulário antigo
-  // const [agentResponse, setAgentResponse] = useState(null);
-  // const [agentLoading, setAgentLoading] = useState(false);
-  // const [agentError, setAgentError] = useState(null);
-  // const [imageFile, setImageFile] = useState(null);
-  // const [isRecording, setIsRecording] = useState(false);
-  // const [recordedAudio, setRecordedAudio] = useState(null); // Blob
-  // const [audioUrl, setAudioUrl] = useState(null);
-  // const mediaRecorderRef = useRef(null);
-  // const audioChunksRef = useRef([]);
-  
-  // Estado para controlar a exibição do chat
   const [showChat, setShowChat] = useState(false);
 
   const categories = [
@@ -30,14 +18,15 @@ export default function Portfolio() {
     { id: "communication", name: "Comunicação" }
   ];
 
-  // Array de agentes com webhookUrl e initialMessage individuais
+  // Array de agentes com webhookUrl, initialMessage e videoUrl individuais
   const agents = [
     {
       id: 1,
       title: "Monitoramento de Transações",
       category: "monitoring",
       description: "Monitora transações em tempo real e envia alertas para comportamentos suspeitos, permitindo a identificação imediata de fraudes e anomalias.",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80", // Mantendo a imagem como fallback ou para o card
+      videoUrl: "/assets/videos/monitoramento_transacoes.mp4", // Placeholder URL
       longDescription: "Este agente utiliza algoritmos avançados para monitorar transações em tempo real, identificando padrões suspeitos e enviando alertas instantâneos. Ideal para instituições financeiras, e-commerces e qualquer empresa que processe transações online, ele oferece uma camada adicional de segurança para proteger seus negócios e clientes contra fraudes.",
       features: [
         "Monitoramento em tempo real de todas as transações",
@@ -53,7 +42,7 @@ export default function Portfolio() {
         "Classificação de risco",
         "Envio de alertas"
       ],
-      webhookUrl: "https://portfolio.n8n.ugaritdigital.com/webhook/atendimento", // Exemplo
+      webhookUrl: "https://portfolio.n8n.ugaritdigital.com/webhook/atendimento",
       initialMessage: "Olá! Sou o agente de Monitoramento de Transações. Como posso ajudar a proteger suas operações hoje?"
     },
     {
@@ -62,6 +51,7 @@ export default function Portfolio() {
       category: "communication",
       description: "Responde a solicitações de clientes 24/7 integrando-se a canais de comunicação como e-mail, WhatsApp e Telegram.",
       image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1769&q=80",
+      videoUrl: "/assets/videos/antendimento_automatico.mp4", // Placeholder URL
       longDescription: "O Agente de Atendimento Automático unifica todos os seus canais de comunicação em uma única plataforma, proporcionando respostas instantâneas a consultas frequentes dos clientes. Ele classifica as mensagens, responde automaticamente às perguntas comuns e escala para humanos quando necessário.",
       features: [
         "Integração com WhatsApp, Telegram, E-mail e Messenger",
@@ -77,7 +67,7 @@ export default function Portfolio() {
         "Registro do atendimento",
         "Análise de satisfação"
       ],
-      webhookUrl: "https://portfolio.n8n.ugaritdigital.com/webhook/atendimento", // Exemplo
+      webhookUrl: "https://portfolio.n8n.ugaritdigital.com/webhook/atendimento",
       initialMessage: "Olá! Sou o agente de Atendimento Automático. Em que posso te ajudar agora?"
     },
     {
@@ -86,6 +76,7 @@ export default function Portfolio() {
       category: "integration",
       description: "Sincroniza dados entre Firebase e outras plataformas em tempo real, mantendo sistemas atualizados e consistentes.",
       image: "https://images.unsplash.com/photo-1597852074816-d933c7d2b988?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+      videoUrl: "/assets/videos/integracao_firebase.mp4", // Placeholder URL
       longDescription: "Este agente cria uma ponte robusta entre o Firebase e qualquer outro sistema que sua empresa utilize. Sincroniza dados em tempo real, garante consistência e oferece um fluxo bidirecional de informações, eliminando a necessidade de processos manuais de exportação e importação.",
       features: [
         "Sincronização bidirecional em tempo real",
@@ -101,7 +92,7 @@ export default function Portfolio() {
         "Confirmação de sincronização",
         "Geração de relatórios de status"
       ],
-      webhookUrl: "https://portfolio.n8n.ugaritdigital.com/webhook/firebase", // Exemplo
+      webhookUrl: "https://portfolio.n8n.ugaritdigital.com/webhook/firebase",
       initialMessage: "Olá! Sou o agente de Integração com Firebase. Precisa sincronizar dados? Me diga como posso ajudar."
     },
     {
@@ -110,6 +101,7 @@ export default function Portfolio() {
       category: "automation",
       description: "Automatiza campanhas de marketing em múltiplos canais, segmentando leads e personalizando mensagens.",
       image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+      videoUrl: "/assets/videos/automacao_marketing.mp4", // Placeholder URL
       longDescription: "O Agente de Automação de Marketing conecta suas ferramentas de CRM, email marketing e redes sociais, criando fluxos automatizados para nutrir leads, programar postagens e analisar resultados. Economize tempo e potencialize seus resultados de marketing com automação inteligente.",
       features: [
         "Segmentação avançada de público",
@@ -125,7 +117,7 @@ export default function Portfolio() {
         "Monitoramento de engajamento",
         "Otimização de campanhas"
       ],
-      webhookUrl: "https://portfolio.n8n.ugaritdigital.com/webhook/marketing", // Exemplo
+      webhookUrl: "https://portfolio.n8n.ugaritdigital.com/webhook/marketing",
       initialMessage: "Olá! Sou o agente de Automação de Marketing. Pronto para otimizar suas campanhas? Me conte seus objetivos!"
     },
     {
@@ -134,6 +126,7 @@ export default function Portfolio() {
       category: "integration",
       description: "Mantém múltiplos CRMs sincronizados, garantindo consistência de dados de clientes e vendas em toda a empresa.",
       image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
+      videoUrl: "/assets/videos/sincronizacao_crm.mp4", // Placeholder URL
       longDescription: "Desenvolvido para empresas que utilizam múltiplos CRMs ou precisam integrar seu CRM com outros sistemas, este agente garante que as informações de clientes, leads e vendas estejam sempre atualizadas em todas as plataformas, eliminando silos de informação.",
       features: [
         "Sincronização bidirecional entre CRMs populares",
@@ -149,7 +142,7 @@ export default function Portfolio() {
         "Atualização em sistemas de destino",
         "Confirmação e log de sincronização"
       ],
-      webhookUrl: "https://portfolio.n8n.ugaritdigital.com/webhook/duvidas", // Exemplo
+      webhookUrl: "https://portfolio.n8n.ugaritdigital.com/webhook/duvidas",
       initialMessage: "Olá! Sou o agente de Sincronização de CRM. Vamos manter seus dados consistentes? Me diga quais sistemas você usa."
     },
     {
@@ -158,6 +151,7 @@ export default function Portfolio() {
       category: "automation",
       description: "Agente inteligente integrado ao n8n para automações clínicas. Envie uma mensagem de teste e veja a resposta em tempo real.",
       image: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=800&q=80",
+      videoUrl: "/assets/videos/agente_max.mp4", // Placeholder URL
       longDescription: "O Agente MAX é um agente inteligente conectado ao n8n, pronto para receber comandos, mensagens e executar automações clínicas. Teste enviando uma mensagem pelo formulário abaixo e veja a resposta do agente em tempo real.",
       features: [
         "Recebe mensagens do site via webhook",
@@ -172,7 +166,7 @@ export default function Portfolio() {
         "n8n processa e executa automação",
         "Resposta é enviada de volta ao site"
       ],
-      webhookUrl: "https://portfolio.n8n.ugaritdigital.com/webhook/sentimental", // Exemplo
+      webhookUrl: "https://portfolio.n8n.ugaritdigital.com/webhook/sentimental",
       initialMessage: "Olá! Sou o Agente MAX, pronto para suas automações clínicas. O que você precisa automatizar hoje?"
     }
   ];
@@ -191,13 +185,9 @@ export default function Portfolio() {
     setShowChat(false);
   };
 
-  // Função para abrir o chat
   const handleOpenChat = () => {
     setShowChat(true);
   };
-
-  // Funções auxiliares removidas (fileToBase64, blobToBase64, startRecording, stopRecording, acionarAgenteMax)
-  // pois a lógica de chat agora está encapsulada em ChatInterface.jsx
 
   return (
     <>
@@ -218,28 +208,46 @@ export default function Portfolio() {
                 className="relative bg-gradient-to-b from-gray-900 to-black border border-gray-800 rounded-2xl shadow-xl max-w-5xl w-full overflow-hidden"
                 style={{ maxHeight: '90vh', overflowY: 'auto' }}
               >
-                {/* Exibir o chat quando showChat for true */}
+                {/* Show chat when showChat is true */}
                 {showChat ? (
                   <div className="h-[80vh]">
                     <ChatInterface 
                       agentName={selectedAgent.title}
-                      agentAvatar={selectedAgent.image}
-                      onClose={() => setShowChat(false)} // Passa a função para fechar o chat
-                      webhookUrl={selectedAgent.webhookUrl} // Passa a URL do webhook do agente selecionado
-                      initialMessage={selectedAgent.initialMessage} // Passa a mensagem inicial do agente selecionado
+                      agentAvatar={selectedAgent.image} // Still using image for avatar in chat
+                      onClose={() => setShowChat(false)}
+                      webhookUrl={selectedAgent.webhookUrl}
+                      initialMessage={selectedAgent.initialMessage}
                     />
                   </div>
                 ) : (
                   <>
-                    <div className="relative h-64 sm:h-96">
-                      <img
-                        src={selectedAgent.image}
-                        alt={selectedAgent.title}
-                        className="w-full h-full object-cover"
-                      />
+                    {/* Replaced img with video */}
+                    <div className="relative h-64 sm:h-96 bg-black"> {/* Added bg-black as fallback */}
+                      {selectedAgent.videoUrl ? (
+                        <video
+                          key={selectedAgent.id} // Add key to force re-render on agent change
+                          src={selectedAgent.videoUrl}
+                          alt={`Demonstração do ${selectedAgent.title}`} // Alt text for accessibility
+                          className="w-full h-full object-cover" // Use object-cover to fill the container
+                          autoPlay
+                          loop
+                          muted
+                          playsInline // Important for autoplay on mobile
+                          onError={(e) => console.error("Erro ao carregar vídeo:", e)} // Basic error handling
+                        >
+                          Seu navegador não suporta a tag de vídeo.
+                        </video>
+                      ) : (
+                        // Fallback image if videoUrl is not provided
+                        <img
+                          src={selectedAgent.image}
+                          alt={selectedAgent.title}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
                       <button
-                        onClick={handleClose} // Botão X fecha o modal inteiro
+                        onClick={handleClose}
                         className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 rounded-full transition-colors"
                       >
                         <X className="w-6 h-6 text-white" />
@@ -303,15 +311,15 @@ export default function Portfolio() {
                           </div>
 
                           {/* Botão para abrir o chat */}
-                          <div className="flex justify-center pt-8">
+                          <div className="pt-8 text-center">
                             <motion.button
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              onClick={handleOpenChat} // Botão agora abre o chat
-                              className="px-8 py-4 bg-gradient-to-r from-[#00f0ff] to-[#9442fe] text-black font-bold rounded-full text-lg flex items-center space-x-2 shadow-lg shadow-[#00f0ff]/30 hover:shadow-[#9442fe]/40 transition-shadow"
+                              onClick={handleOpenChat}
+                              className="inline-flex items-center px-8 py-3 border border-transparent text-lg font-medium rounded-full shadow-lg text-black bg-gradient-to-r from-[#00f0ff] to-[#9442fe] hover:from-[#00d0df] hover:to-[#8432ee] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00f0ff]/50 transition-all duration-300"
                             >
-                              <span>Solicitar Este Agente</span>
-                              <Plus className="w-5 h-5" />
+                              Solicitar Este Agente
+                              <Plus className="ml-2 -mr-1 h-5 w-5" />
                             </motion.button>
                           </div>
                         </div>
@@ -324,23 +332,23 @@ export default function Portfolio() {
           )}
         </AnimatePresence>
 
-        {/* Portfolio Grid */}
+        {/* Main Content - Portfolio Grid */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <h1 className="text-4xl font-bold text-center mb-4 gradient-text">Nossos Agentes</h1>
+          <h1 className="text-4xl font-bold text-center mb-4 gradient-text">Portfólio de Agentes</h1>
           <p className="text-xl text-gray-400 text-center mb-12 max-w-3xl mx-auto">
-            Explore nossa coleção de agentes inteligentes projetados para automatizar e otimizar diversas áreas do seu negócio.
+            Explore nossos agentes especializados, prontos para automatizar e otimizar diversas áreas do seu negócio.
           </p>
 
-          {/* Filters */}
+          {/* Category Filters */}
           <div className="flex justify-center space-x-2 sm:space-x-4 mb-12 flex-wrap">
             {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setFilter(category.id)}
-                className={`px-4 py-2 rounded-full text-sm sm:text-base transition-colors ${
+                className={`px-4 py-2 mb-2 rounded-full text-sm font-medium transition-colors duration-200 ${
                   filter === category.id
-                    ? "bg-gradient-to-r from-[#00f0ff] to-[#9442fe] text-black font-semibold"
-                    : "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white"
+                    ? "bg-gradient-to-r from-[#00f0ff] to-[#9442fe] text-black"
+                    : "bg-gray-800 text-gray-300 hover:bg-gray-700"
                 }`}
               >
                 {category.name}
@@ -348,43 +356,48 @@ export default function Portfolio() {
             ))}
           </div>
 
-          {/* Agent Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredAgents.map((agent) => (
-              <motion.div
-                key={agent.id}
-                layout
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ duration: 0.3 }}
-                className="bg-gradient-to-br from-gray-900 to-black border border-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-[#00f0ff]/20 transition-shadow duration-300 flex flex-col"
-              >
-                <div className="relative h-48">
-                  <img
-                    src={agent.image}
-                    alt={agent.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
-                </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-xl font-semibold mb-2">{agent.title}</h3>
-                  <span className="px-2 py-0.5 text-xs rounded-full bg-gray-800 text-gray-400 self-start mb-3">
-                    {categories.find(c => c.id === agent.category)?.name}
-                  </span>
-                  <p className="text-gray-400 text-sm mb-4 flex-grow">{agent.description}</p>
-                  <button
-                    onClick={() => handleAgentClick(agent)}
-                    className="mt-auto w-full px-4 py-2 bg-gradient-to-r from-[#00f0ff]/80 to-[#9442fe]/80 text-black font-semibold rounded-lg hover:from-[#00f0ff] hover:to-[#9442fe] transition-colors flex items-center justify-center space-x-2"
-                  >
-                    <span>Ver Detalhes</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {/* Agent Grid */}
+          <motion.div 
+            layout 
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            <AnimatePresence>
+              {filteredAgents.map((agent) => (
+                <motion.div
+                  key={agent.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg border border-gray-800 flex flex-col h-full group cursor-pointer"
+                  onClick={() => handleAgentClick(agent)}
+                >
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      src={agent.image}
+                      alt={agent.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <span className="absolute top-4 left-4 px-2 py-0.5 text-xs rounded-full bg-gray-800/70 text-gray-300">
+                      {categories.find(c => c.id === agent.category)?.name}
+                    </span>
+                  </div>
+                  <div className="p-6 flex flex-col flex-grow">
+                    <h3 className="text-xl font-semibold mb-2">{agent.title}</h3>
+                    <p className="text-gray-400 text-sm mb-4 flex-grow">{agent.description}</p>
+                    <div className="mt-auto">
+                      <span className="inline-flex items-center text-sm font-medium text-[#00f0ff] group-hover:text-[#9442fe] transition-colors">
+                        Ver Detalhes
+                        <ArrowRight className="ml-1 h-4 w-4" />
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
         </div>
       </div>
     </>
