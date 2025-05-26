@@ -26,7 +26,7 @@ export default function Portfolio() {
       category: "monitoring",
       description: "Monitora transações em tempo real e envia alertas para comportamentos suspeitos, permitindo a identificação imediata de fraudes e anomalias.",
       image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80", // Mantendo a imagem como fallback ou para o card
-      videoUrl: "/assets/videos/monitoramento_transacoes.mp4", // Placeholder URL
+      videoUrl: "/assets/videos/Agente_Emocional.mp4", // Placeholder URL
       longDescription: "Este agente utiliza algoritmos avançados para monitorar transações em tempo real, identificando padrões suspeitos e enviando alertas instantâneos. Ideal para instituições financeiras, e-commerces e qualquer empresa que processe transações online, ele oferece uma camada adicional de segurança para proteger seus negócios e clientes contra fraudes.",
       features: [
         "Monitoramento em tempo real de todas as transações",
@@ -76,7 +76,7 @@ export default function Portfolio() {
       category: "integration",
       description: "Sincroniza dados entre Firebase e outras plataformas em tempo real, mantendo sistemas atualizados e consistentes.",
       image: "https://images.unsplash.com/photo-1597852074816-d933c7d2b988?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-      videoUrl: "/assets/videos/integracao_firebase.mp4", // Placeholder URL
+      videoUrl: "/assets/videos/Agente_RAG.mp4", // Placeholder URL
       longDescription: "Este agente cria uma ponte robusta entre o Firebase e qualquer outro sistema que sua empresa utilize. Sincroniza dados em tempo real, garante consistência e oferece um fluxo bidirecional de informações, eliminando a necessidade de processos manuais de exportação e importação.",
       features: [
         "Sincronização bidirecional em tempo real",
@@ -101,7 +101,7 @@ export default function Portfolio() {
       category: "automation",
       description: "Automatiza campanhas de marketing em múltiplos canais, segmentando leads e personalizando mensagens.",
       image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-      videoUrl: "/assets/videos/automacao_marketing.mp4", // Placeholder URL
+      videoUrl: "/assets/videos/Agente_Imobiliario.mp4", // Placeholder URL
       longDescription: "O Agente de Automação de Marketing conecta suas ferramentas de CRM, email marketing e redes sociais, criando fluxos automatizados para nutrir leads, programar postagens e analisar resultados. Economize tempo e potencialize seus resultados de marketing com automação inteligente.",
       features: [
         "Segmentação avançada de público",
@@ -126,7 +126,7 @@ export default function Portfolio() {
       category: "integration",
       description: "Mantém múltiplos CRMs sincronizados, garantindo consistência de dados de clientes e vendas em toda a empresa.",
       image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-      videoUrl: "/assets/videos/sincronizacao_crm.mp4", // Placeholder URL
+      videoUrl: "/assets/videos/Agente_Atendimento.mp4", // Placeholder URL
       longDescription: "Desenvolvido para empresas que utilizam múltiplos CRMs ou precisam integrar seu CRM com outros sistemas, este agente garante que as informações de clientes, leads e vendas estejam sempre atualizadas em todas as plataformas, eliminando silos de informação.",
       features: [
         "Sincronização bidirecional entre CRMs populares",
@@ -151,7 +151,7 @@ export default function Portfolio() {
       category: "automation",
       description: "Agente inteligente integrado ao n8n para automações clínicas. Envie uma mensagem de teste e veja a resposta em tempo real.",
       image: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=800&q=80",
-      videoUrl: "/assets/videos/agente_max.mp4", // Placeholder URL
+      videoUrl: "/assets/videos/Agente_Max.mp4", // Placeholder URL
       longDescription: "O Agente MAX é um agente inteligente conectado ao n8n, pronto para receber comandos, mensagens e executar automações clínicas. Teste enviando uma mensagem pelo formulário abaixo e veja a resposta do agente em tempo real.",
       features: [
         "Recebe mensagens do site via webhook",
