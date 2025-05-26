@@ -26,7 +26,7 @@ export default function Portfolio() {
       category: "monitoring",
       description: "Monitora transações em tempo real e envia alertas para comportamentos suspeitos, permitindo a identificação imediata de fraudes e anomalias.",
       image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80", // Mantendo a imagem como fallback ou para o card
-      videoUrl: "/assets/videos/Agente_Emocional.mp4", // Placeholder URL
+      videoUrl: "/assets/videos/Agente_Emocional.gif", // GIF atualizado
       longDescription: "Este agente utiliza algoritmos avançados para monitorar transações em tempo real, identificando padrões suspeitos e enviando alertas instantâneos. Ideal para instituições financeiras, e-commerces e qualquer empresa que processe transações online, ele oferece uma camada adicional de segurança para proteger seus negócios e clientes contra fraudes.",
       features: [
         "Monitoramento em tempo real de todas as transações",
@@ -51,7 +51,7 @@ export default function Portfolio() {
       category: "communication",
       description: "Responde a solicitações de clientes 24/7 integrando-se a canais de comunicação como e-mail, WhatsApp e Telegram.",
       image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1769&q=80",
-      videoUrl: "/assets/videos/antendimento_automatico.mp4", // Placeholder URL
+      videoUrl: "/assets/videos/antendimento_automatico.gif", // GIF atualizado
       longDescription: "O Agente de Atendimento Automático unifica todos os seus canais de comunicação em uma única plataforma, proporcionando respostas instantâneas a consultas frequentes dos clientes. Ele classifica as mensagens, responde automaticamente às perguntas comuns e escala para humanos quando necessário.",
       features: [
         "Integração com WhatsApp, Telegram, E-mail e Messenger",
@@ -76,7 +76,7 @@ export default function Portfolio() {
       category: "integration",
       description: "Sincroniza dados entre Firebase e outras plataformas em tempo real, mantendo sistemas atualizados e consistentes.",
       image: "https://images.unsplash.com/photo-1597852074816-d933c7d2b988?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-      videoUrl: "/assets/videos/Agente_RAG.mp4", // Placeholder URL
+      videoUrl: "/assets/videos/Agente_RAG.gif", // GIF atualizado
       longDescription: "Este agente cria uma ponte robusta entre o Firebase e qualquer outro sistema que sua empresa utilize. Sincroniza dados em tempo real, garante consistência e oferece um fluxo bidirecional de informações, eliminando a necessidade de processos manuais de exportação e importação.",
       features: [
         "Sincronização bidirecional em tempo real",
@@ -101,7 +101,7 @@ export default function Portfolio() {
       category: "automation",
       description: "Automatiza campanhas de marketing em múltiplos canais, segmentando leads e personalizando mensagens.",
       image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-      videoUrl: "/assets/videos/Agente_Imobiliario.mp4", // Placeholder URL
+      videoUrl: "/assets/videos/Agente_Imobiliario.gif", // GIF atualizado
       longDescription: "O Agente de Automação de Marketing conecta suas ferramentas de CRM, email marketing e redes sociais, criando fluxos automatizados para nutrir leads, programar postagens e analisar resultados. Economize tempo e potencialize seus resultados de marketing com automação inteligente.",
       features: [
         "Segmentação avançada de público",
@@ -126,7 +126,7 @@ export default function Portfolio() {
       category: "integration",
       description: "Mantém múltiplos CRMs sincronizados, garantindo consistência de dados de clientes e vendas em toda a empresa.",
       image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
-      videoUrl: "/assets/videos/Agente_Atendimento.mp4", // Placeholder URL
+      videoUrl: "/assets/videos/Agente_Atendimento.gif", // GIF atualizado
       longDescription: "Desenvolvido para empresas que utilizam múltiplos CRMs ou precisam integrar seu CRM com outros sistemas, este agente garante que as informações de clientes, leads e vendas estejam sempre atualizadas em todas as plataformas, eliminando silos de informação.",
       features: [
         "Sincronização bidirecional entre CRMs populares",
@@ -151,7 +151,7 @@ export default function Portfolio() {
       category: "automation",
       description: "Agente inteligente integrado ao n8n para automações clínicas. Envie uma mensagem de teste e veja a resposta em tempo real.",
       image: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=800&q=80",
-      videoUrl: "/assets/videos/Agente_Max.mp4", // Placeholder URL
+      videoUrl: "/assets/videos/Agente_Max.gif", // GIF atualizado
       longDescription: "O Agente MAX é um agente inteligente conectado ao n8n, pronto para receber comandos, mensagens e executar automações clínicas. Teste enviando uma mensagem pelo formulário abaixo e veja a resposta do agente em tempo real.",
       features: [
         "Recebe mensagens do site via webhook",
@@ -221,25 +221,45 @@ export default function Portfolio() {
                   </div>
                 ) : (
                   <>
-                    {/* Replaced img with video */}
-                    <div className="relative h-64 sm:h-96 bg-black"> {/* Added bg-black as fallback */}
+                    {/* Renderização condicional para GIF, Vídeo ou Imagem de Fallback */}
+                    <div className="relative h-64 sm:h-96 bg-black">
                       {selectedAgent.videoUrl ? (
-                        <video
-                          key={selectedAgent.id} // Add key to force re-render on agent change
-                          src={selectedAgent.videoUrl}
-                          alt={`Demonstração do ${selectedAgent.title}`} // Alt text for accessibility
-                          className="w-full h-full object-cover" // Use object-cover to fill the container
-                          autoPlay
-                          loop
-                          muted
-                          playsInline // Important for autoplay on mobile
-                          onError={(e) => console.error("Erro ao carregar vídeo:", e)} // Basic error handling
-                        >
-                          Seu navegador não suporta a tag de vídeo.
-                        </video>
+                        selectedAgent.videoUrl.toLowerCase().endsWith('.gif') ? (
+                          // Renderizar como imagem se for GIF
+                          <img
+                            key={`${selectedAgent.id}-gif`} // Chave única para GIF
+                            src={selectedAgent.videoUrl}
+                            alt={`Demonstração do ${selectedAgent.title}`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              console.error("Erro ao carregar GIF:", e);
+                              e.target.src = selectedAgent.image; // Fallback para imagem estática
+                            }}
+                          />
+                        ) : (
+                          // Renderizar como vídeo se não for GIF (assumindo MP4, etc.)
+                          <video
+                            key={`${selectedAgent.id}-video`} // Chave única para vídeo
+                            src={selectedAgent.videoUrl}
+                            alt={`Demonstração do ${selectedAgent.title}`} // Alt text não é padrão para vídeo, mas pode ser útil
+                            className="w-full h-full object-cover"
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            onError={(e) => {
+                              console.error("Erro ao carregar vídeo:", e);
+                              // O fallback aqui é mais complexo, talvez mostrar a imagem estática?
+                              // Por enquanto, apenas logamos o erro. O navegador pode mostrar controles ou uma mensagem.
+                            }}
+                          >
+                            Seu navegador não suporta a tag de vídeo. {/* Mensagem de fallback */}
+                          </video>
+                        )
                       ) : (
-                        // Fallback image if videoUrl is not provided
+                        // Imagem de fallback se videoUrl não for fornecido
                         <img
+                          key={`${selectedAgent.id}-fallback`} // Chave única para fallback
                           src={selectedAgent.image}
                           alt={selectedAgent.title}
                           className="w-full h-full object-cover"
