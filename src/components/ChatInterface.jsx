@@ -484,7 +484,7 @@ const ChatInterface = ({
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
               disabled={isLoading || isRecording}
-              placeholder="Type your message..."
+              placeholder="Escreva sua mensagem..."
               className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-[#00f0ff]/50 focus:border-transparent"
             />
           </div>
