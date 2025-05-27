@@ -4,30 +4,23 @@ import { Send, Mail, Phone, MapPin, MessageSquare, CheckCircle } from "lucide-re
 
 export default function Contact() {
   const [formData, setFormData] = useState({
-    name: "",
+    nome_empresario: "",
     email: "",
-    phone: "",
-    subject: "",
-    message: "",
-    agentType: ""
+    telefone: "",
+    nome_empresa: "",
+    redes_empresa: "",
+    faturamento: "",
+    segmento: "",
+    text_desejo: ""
   });
   
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  
-  const agentTypes = [
-    { id: "integration", name: "Integração de Sistemas" },
-    { id: "automation", name: "Automação de Processos" },
-    { id: "monitoring", name: "Monitoramento de Dados" },
-    { id: "communication", name: "Comunicação Automática" },
-    { id: "custom", name: "Solução Personalizada" }
-  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error for this field
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: "" }));
     }
@@ -35,46 +28,46 @@ export default function Contact() {
 
   const validate = () => {
     const newErrors = {};
-    
-    if (!formData.name.trim()) {
-      newErrors.name = "Nome é obrigatório";
+    if (!formData.nome_empresario.trim()) {
+      newErrors.nome_empresario = "Nome do empresário é obrigatório";
     }
-    
     if (!formData.email.trim()) {
       newErrors.email = "Email é obrigatório";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Email inválido";
     }
-    
-    if (!formData.message.trim()) {
-      newErrors.message = "Mensagem é obrigatória";
+    if (!formData.text_desejo.trim()) {
+      newErrors.text_desejo = "Descreva seu desejo/necessidade";
     }
-    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!validate()) return;
-    
     setIsSubmitting(true);
-    
-    // Simulate API call
+    setIsSuccess(false);
+    const webhookUrl = "https://portfolio.n8n.ugaritdigital.com/webhook/form-page";
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setIsSuccess(true);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
-        agentType: ""
+      const response = await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
+      if (response.ok) {
+        setIsSuccess(true);
+        setFormData({
+          nome_empresario: "", email: "", telefone: "", nome_empresa: "",
+          redes_empresa: "", faturamento: "", segmento: "", text_desejo: ""
+        });
+      } else {
+        console.error("Webhook submission failed:", response.status, await response.text());
+        alert("Ocorreu um erro ao enviar o formulário. Tente novamente.");
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
+      alert("Ocorreu um erro de conexão ao enviar o formulário. Verifique sua internet e tente novamente.");
     } finally {
       setIsSubmitting(false);
     }
@@ -86,7 +79,6 @@ export default function Contact() {
       <section className="relative py-20 bg-gradient-to-b from-black to-gray-900">
         <div className="absolute top-0 right-0 w-1/3 h-64 bg-[#9442fe]/20 blur-[120px]"></div>
         <div className="absolute bottom-0 left-0 w-1/3 h-64 bg-[#00f0ff]/20 blur-[120px]"></div>
-        
         <div className="container mx-auto px-6 relative z-10">
           <motion.div 
             className="max-w-4xl mx-auto text-center"
@@ -120,30 +112,12 @@ export default function Contact() {
                 <h2 className="text-3xl font-bold mb-8">
                   Vamos conversar sobre <span className="gradient-text">automação</span>
                 </h2>
-                
                 <div className="space-y-6">
-                  <ContactInfoItem 
-                    icon={<Mail className="w-6 h-6 text-[#00f0ff]" />}
-                    title="Email"
-                    content="contato@ugaritdigital.com"
-                  />
-                  <ContactInfoItem 
-                    icon={<Phone className="w-6 h-6 text-[#00f0ff]" />}
-                    title="Telefone"
-                    content="+55 11 99999-9999"
-                  />
-                  <ContactInfoItem 
-                    icon={<MapPin className="w-6 h-6 text-[#00f0ff]" />}
-                    title="Endereço"
-                    content="São Paulo, SP - Brasil"
-                  />
-                  <ContactInfoItem 
-                    icon={<MessageSquare className="w-6 h-6 text-[#00f0ff]" />}
-                    title="Horário de Atendimento"
-                    content="Segunda à Sexta, 9h às 18h"
-                  />
+                  <ContactInfoItem icon={<Mail className="w-6 h-6 text-[#00f0ff]" />} title="Email" content="contato@ugaritdigital.com" />
+                  <ContactInfoItem icon={<Phone className="w-6 h-6 text-[#00f0ff]" />} title="Telefone" content="+55 11 99999-9999" />
+                  <ContactInfoItem icon={<MapPin className="w-6 h-6 text-[#00f0ff]" />} title="Endereço" content="São Paulo, SP - Brasil" />
+                  <ContactInfoItem icon={<MessageSquare className="w-6 h-6 text-[#00f0ff]" />} title="Horário de Atendimento" content="Segunda à Sexta, 9h às 18h" />
                 </div>
-                
                 <div className="mt-12">
                   <h3 className="text-xl font-bold mb-4">Siga-nos</h3>
                   <div className="flex space-x-4">
@@ -171,9 +145,7 @@ export default function Contact() {
                     <CheckCircle className="w-10 h-10 text-[#00f0ff]" />
                   </div>
                   <h3 className="text-2xl font-bold mb-4">Mensagem Enviada!</h3>
-                  <p className="text-gray-300 mb-8">
-                    Obrigado por entrar em contato conosco. Nossa equipe responderá em breve.
-                  </p>
+                  <p className="text-gray-300 mb-8">Obrigado por entrar em contato conosco. Nossa equipe responderá em breve.</p>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -186,97 +158,40 @@ export default function Contact() {
               ) : (
                 <div className="bg-gradient-to-b from-gray-800/30 to-gray-900/30 border border-gray-800 rounded-xl p-8">
                   <h2 className="text-2xl font-bold mb-6">Quero Inovar com a Ugarit</h2>
-                  
                   <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Grid 1 */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormInput
-                        label="Nome"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        error={errors.name}
-                        required
-                      />
-                      <FormInput
-                        label="Email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        error={errors.email}
-                        required
-                      />
+                      <FormInput label="Nome do Empresário" name="nome_empresario" value={formData.nome_empresario} onChange={handleChange} error={errors.nome_empresario} required />
+                      <FormInput label="Email" name="email" type="email" value={formData.email} onChange={handleChange} error={errors.email} required />
                     </div>
+                    {/* Grid 2 */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormInput
-                        label="Telefone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        error={errors.phone}
-                      />
-                      <FormInput
-                        label="Assunto"
-                        name="subject"
-                        value={formData.subject}
-                        onChange={handleChange}
-                        error={errors.subject}
-                      />
+                      <FormInput label="Telefone" name="telefone" value={formData.telefone} onChange={handleChange} error={errors.telefone} />
+                      <FormInput label="Nome da Empresa" name="nome_empresa" value={formData.nome_empresa} onChange={handleChange} error={errors.nome_empresa} />
                     </div>
-                    
-                    <div>
-                      <label className="block text-white mb-2">Tipo de Agente</label>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                        {agentTypes.map(type => (
-                          <label 
-                            key={type.id} 
-                            className={`
-                              px-4 py-3 rounded-lg border cursor-pointer transition-all flex items-center
-                              ${formData.agentType === type.id 
-                                ? "border-[#00f0ff] bg-[#00f0ff]/10" 
-                                : "border-gray-700 bg-gray-800/30 hover:border-gray-600"}
-                            `}
-                          >
-                            <input
-                              type="radio"
-                              name="agentType"
-                              value={type.id}
-                              checked={formData.agentType === type.id}
-                              onChange={handleChange}
-                              className="sr-only"
-                            />
-                            <div 
-                              className={`w-4 h-4 rounded-full mr-3 border ${
-                                formData.agentType === type.id 
-                                  ? "border-[#00f0ff] bg-[#00f0ff]" 
-                                  : "border-gray-500"
-                              }`}
-                            />
-                            <span className="text-sm">{type.name}</span>
-                          </label>
-                        ))}
-                      </div>
+                    {/* Grid 3 */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <FormInput label="Redes Sociais da Empresa" name="redes_empresa" value={formData.redes_empresa} onChange={handleChange} error={errors.redes_empresa} />
+                      <FormInput label="Faturamento Anual (Aproximado)" name="faturamento" value={formData.faturamento} onChange={handleChange} error={errors.faturamento} />
                     </div>
-                    
+                    {/* Field: Segmento */}
                     <div>
-                      <label className="block text-white mb-2">
-                        Sua Mensagem <span className="text-red-500">*</span>
-                      </label>
+                      <FormInput label="Segmento de Atuação" name="segmento" value={formData.segmento} onChange={handleChange} error={errors.segmento} />
+                    </div>
+                    {/* Field: Text Desejo */}
+                    <div>
+                      <label className="block text-white mb-2">Descreva seu Desejo/Necessidade <span className="text-red-500">*</span></label>
                       <textarea
-                        name="message"
-                        value={formData.message}
+                        name="text_desejo"
+                        value={formData.text_desejo}
                         onChange={handleChange}
                         rows={5}
-                        className={`w-full px-4 py-3 bg-gray-800/50 border ${
-                          errors.message ? "border-red-500" : "border-gray-700"
-                        } rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f0ff]/50 focus:border-transparent transition-all resize-none`}
+                        className={`w-full px-4 py-3 bg-gray-800/50 border ${errors.text_desejo ? "border-red-500" : "border-gray-700"} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f0ff]/50 focus:border-transparent transition-all resize-none`}
                         placeholder="Descreva seu desafio, ideia ou objetivo. Vamos juntos além do comum!"
                       ></textarea>
-                      {errors.message && (
-                        <p className="mt-1 text-red-500 text-sm">{errors.message}</p>
-                      )}
+                      {errors.text_desejo && <p className="mt-1 text-red-500 text-sm">{errors.text_desejo}</p>}
                     </div>
-                    
+                    {/* Submit Button */}
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -285,15 +200,9 @@ export default function Contact() {
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
-                        <>
-                          <div className="animate-spin mr-3 h-5 w-5 border-2 border-black border-t-transparent rounded-full"></div>
-                          Enviando para o Futuro...
-                        </>
+                        <><div className="animate-spin mr-3 h-5 w-5 border-2 border-black border-t-transparent rounded-full"></div>Enviando para o Futuro...</>
                       ) : (
-                        <>
-                          <Send className="w-5 h-5 mr-2" />
-                          Quero Inovar com a Ugarit
-                        </>
+                        <><Send className="w-5 h-5 mr-2" />Quero Inovar com a Ugarit</>
                       )}
                     </motion.button>
                   </form>
@@ -308,7 +217,6 @@ export default function Contact() {
       <section className="py-16 bg-black">
         <div className="container mx-auto px-6">
           <div className="border border-gray-800 rounded-xl overflow-hidden h-96">
-            {/* Placeholder for map */}
             <div className="w-full h-full bg-gradient-to-r from-gray-900 to-black flex items-center justify-center">
               <div className="text-center">
                 <MapPin className="w-16 h-16 text-[#00f0ff]/30 mx-auto mb-4" />
@@ -327,9 +235,7 @@ export default function Contact() {
 const ContactInfoItem = ({ icon, title, content }) => {
   return (
     <div className="flex items-start space-x-4">
-      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#00f0ff]/10 to-[#9442fe]/10 flex items-center justify-center flex-shrink-0">
-        {icon}
-      </div>
+      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#00f0ff]/10 to-[#9442fe]/10 flex items-center justify-center flex-shrink-0">{icon}</div>
       <div>
         <h3 className="font-bold text-white">{title}</h3>
         <p className="text-gray-400">{content}</p>
@@ -339,16 +245,16 @@ const ContactInfoItem = ({ icon, title, content }) => {
 };
 
 const SocialIcon = ({ name }) => {
+  const icons = {
+    linkedin: <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>,
+    twitter: <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-.422.724-.665 1.56-.665 2.456 0 1.484.757 2.795 1.909 3.562-.703-.022-1.365-.215-1.948-.538v.051c0 2.072 1.474 3.8 3.421 4.194-.358.097-.736.148-1.13.148-.274 0-.54-.026-.796-.076.544 1.698 2.126 2.934 3.999 2.97-1.463 1.146-3.31 1.828-5.313 1.828-.344 0-.683-.02-1.016-.06 1.892 1.212 4.14 1.918 6.561 1.918 7.874 0 12.177-6.522 12.177-12.177 0-.185-.004-.368-.012-.55.836-.603 1.56-1.354 2.135-2.216z"/>,
+    instagram: <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.85s-.011 3.584-.069 4.85c-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.069-1.645-.069-4.85s.011-3.584.069-4.85c.149-3.225 1.664-4.771 4.919-4.919 1.266-.057 1.644-.069 4.85-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072s3.667-.014 4.947-.072c4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.947s-.014-3.667-.072-4.947c-.196-4.358-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+  };
   return (
-    <a 
-      href={`https://${name}.com`} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors"
-    >
+    <a href={`https://${name}.com`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors">
       <span className="sr-only">{name}</span>
       <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path fillRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10 5.523 0 10-4.477 10-10 0-5.523-4.477-10-10-10z" clipRule="evenodd" />
+        {icons[name] || <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/>}
       </svg>
     </a>
   );
@@ -357,21 +263,15 @@ const SocialIcon = ({ name }) => {
 const FormInput = ({ label, name, type = "text", value, onChange, error, required = false }) => {
   return (
     <div>
-      <label className="block text-white mb-2">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
+      <label className="block text-white mb-2">{label} {required && <span className="text-red-500">*</span>}</label>
       <input
         type={type}
         name={name}
         value={value}
         onChange={onChange}
-        className={`w-full px-4 py-3 bg-gray-800/50 border ${
-          error ? "border-red-500" : "border-gray-700"
-        } rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f0ff]/50 focus:border-transparent transition-all`}
+        className={`w-full px-4 py-3 bg-gray-800/50 border ${error ? "border-red-500" : "border-gray-700"} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00f0ff]/50 focus:border-transparent transition-all`}
       />
-      {error && (
-        <p className="mt-1 text-red-500 text-sm">{error}</p>
-      )}
+      {error && <p className="mt-1 text-red-500 text-sm">{error}</p>}
     </div>
   );
-}; 
+};
