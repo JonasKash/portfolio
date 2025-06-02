@@ -22,7 +22,7 @@ export default function Portfolio() {
   const agents = [
     {
       id: 1,
-      title: "Monitoramento de Transações",
+      title: "Agente Emocional",
       category: "monitoring",
       description: "Monitora transações em tempo real e envia alertas para comportamentos suspeitos, permitindo a identificação imediata de fraudes e anomalias.",
       image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80", // Mantendo a imagem como fallback ou para o card
@@ -42,7 +42,7 @@ export default function Portfolio() {
         "Classificação de risco",
         "Envio de alertas"
       ],
-      webhookUrl: "https://portfolio.n8n.ugaritdigital.com/webhook/atendimento",
+      webhookUrl: "https://teste.ugaritdigital.com/webhook/sentimental",
       initialMessage: "Olá! Sou o agente de Monitoramento de Transações. Como posso ajudar a proteger suas operações hoje?"
     },
     {

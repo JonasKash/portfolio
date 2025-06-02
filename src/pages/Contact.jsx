@@ -48,7 +48,7 @@ export default function Contact() {
     if (!validate()) return;
     setIsSubmitting(true);
     setIsSuccess(false);
-    const webhookUrl = "https://portfolio.n8n.ugaritdigital.com/webhook/form-page";
+    const webhookUrl = "https://portfolio.n8n.ugaritdigital.com/webhook-test/form-page";
     try {
       const response = await fetch(webhookUrl, {
         method: "POST",
